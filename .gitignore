@@ -124,3 +124,7 @@ StyleCopReport.xml
 *_wpftmp.csproj
 *.log
 *.tlog
+
+.vs/
+bin/
+obj/
