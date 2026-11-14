@@ -20,6 +20,15 @@ body:
     validations:
       required: true
 
+   - type: textarea
+    id: broj_ponavljanja
+    attributes:
+      label: Broj ponavljanja defekta u kodu
+      description: Napiši broj ponavljanja greške u kodu umjesto kreiranja nekoliko issue kartica za isti tip defekta.
+      default: 1
+    validations:
+      required: true
+
   - type: dropdown
     id: sigurnosni_propust
     attributes:
