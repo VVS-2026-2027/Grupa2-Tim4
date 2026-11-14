@@ -1,0 +1,32 @@
+name: Prijava greške
+description: Prijava greške pronađene tokom pregleda koda.
+title: "[NUM-X] Klasa.Metoda - Naziv"
+body:
+  - type: input
+    id: pr_komentar
+    attributes:
+      label: Link na PR komentar
+      description: Dodajte link komentara
+      placeholder: "https://github.com/VVS-2026-2027/Grupa2-Tim4/pull/1/changes#r...."
+    validations:
+      required: true
+
+  - type: textarea
+    id: opis
+    attributes:
+      label: Opis
+      description: Objašnjenje problema u kodu. Dovoljno zalijepiti komentar iz Pull Requesta
+      placeholder: "[DEF-001] [Severity 1 – Minorno] [Checklist: Struktura]"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: sigurnosni_propust
+    attributes:
+      label: Sigurnosni problem
+      description: Odaberite "DA" ili "NE".
+      options:
+        - "NE"
+        - "DA"
+    validations:
+      required: true
