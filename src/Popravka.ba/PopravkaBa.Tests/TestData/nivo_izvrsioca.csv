@@ -1,0 +1,13 @@
+brojZavrsenihPoslova,brojRecenzija,prosjecnaOcjena,ocekivaniNivo,opis
+0,0,0.0,Novi,Potpuno novi izvrsilac
+2,10,5.0,Novi,Premalo zavrsenih poslova
+3,3,4.0,Pouzdan,Tacno na pragu za Pouzdan
+3,3,3.99,Novi,Ocjena tik ispod praga za Pouzdan
+3,2,4.5,Novi,Premalo recenzija za Pouzdan
+9,10,5.0,Pouzdan,Jedan posao manje od praga za TopMajstor
+10,5,4.5,TopMajstor,Tacno na pragu za TopMajstor
+10,5,4.49,Pouzdan,Ocjena tik ispod praga za TopMajstor
+10,4,4.9,Pouzdan,Premalo recenzija za TopMajstor
+10,2,5.0,Novi,Puno poslova ali premalo recenzija
+10,5,3.9,Novi,Puno poslova ali losa ocjena
+50,40,4.8,TopMajstor,Iskusan izvrsilac

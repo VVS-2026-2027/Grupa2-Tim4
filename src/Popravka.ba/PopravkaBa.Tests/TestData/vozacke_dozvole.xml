@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<slucajevi>
+  <slucaj opis="Ista kategorija" posjedovane="B" trazena="B" ocekivano="true" />
+  <slucaj opis="B pokriva B1" posjedovane="B" trazena="B1" ocekivano="true" />
+  <slucaj opis="B1 ne pokriva B" posjedovane="B1" trazena="B" ocekivano="false" />
+  <slucaj opis="B ne pokriva C" posjedovane="B" trazena="C" ocekivano="false" />
+  <slucaj opis="BE pokriva B" posjedovane="BE" trazena="B" ocekivano="true" />
+
+  <slucaj opis="A pokriva A1" posjedovane="A" trazena="A1" ocekivano="true" />
+  <slucaj opis="A1 ne pokriva A" posjedovane="A1" trazena="A" ocekivano="false" />
+  <slucaj opis="A ne pokriva B" posjedovane="A" trazena="B" ocekivano="false" />
+
+  <slucaj opis="C pokriva C1" posjedovane="C" trazena="C1" ocekivano="true" />
+  <slucaj opis="C pokriva B (tranzitivno preko C1)" posjedovane="C" trazena="B" ocekivano="true" />
+  <slucaj opis="C pokriva B1 (tranzitivno)" posjedovane="C" trazena="B1" ocekivano="true" />
+  <slucaj opis="C1 ne pokriva C" posjedovane="C1" trazena="C" ocekivano="false" />
+  <slucaj opis="C ne pokriva CE" posjedovane="C" trazena="CE" ocekivano="false" />
+
+  <slucaj opis="CE pokriva C" posjedovane="CE" trazena="C" ocekivano="true" />
+  <slucaj opis="CE pokriva C1E" posjedovane="CE" trazena="C1E" ocekivano="true" />
+  <slucaj opis="CE pokriva BE" posjedovane="CE" trazena="BE" ocekivano="true" />
+  <slucaj opis="CE ne pokriva D" posjedovane="CE" trazena="D" ocekivano="false" />
+
+  <slucaj opis="D pokriva D1" posjedovane="D" trazena="D1" ocekivano="true" />
+  <slucaj opis="D ne pokriva C" posjedovane="D" trazena="C" ocekivano="false" />
+  <slucaj opis="DE pokriva BE" posjedovane="DE" trazena="BE" ocekivano="true" />
+
+  <slucaj opis="Vise dozvola - pokrivena jednom od njih" posjedovane="A,B" trazena="A1" ocekivano="true" />
+  <slucaj opis="Vise dozvola - nijedna ne pokriva" posjedovane="A,B" trazena="C" ocekivano="false" />
+  <slucaj opis="Bez dozvola" posjedovane="" trazena="B" ocekivano="false" />
+
+  <slucaj opis="Sve pokriva DE" posjedovane="Sve" trazena="DE" ocekivano="true" />
+  <slucaj opis="Trazena Sve - CE nije dovoljno" posjedovane="CE" trazena="Sve" ocekivano="false" />
+</slucajevi>
