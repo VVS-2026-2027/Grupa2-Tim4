@@ -1,0 +1,7 @@
+
+naziv;stavke;ukupno
+Prazna stranica;;0
+Jedna stavka;7;1
+Vise stavki;3|5|8;3
+Dio ukupnih rezultata;10|20;15
+Nulte i negativne vrijednosti;0|-2|4;3

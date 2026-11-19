@@ -1,0 +1,19 @@
+
+<TestSlucajevi>
+  <Slucaj naziv="Bez rezultata">
+    <Stavke></Stavke>
+    <Ukupno>0</Ukupno>
+  </Slucaj>
+  <Slucaj naziv="Jedan rezultat">
+    <Stavke>42</Stavke>
+    <Ukupno>1</Ukupno>
+  </Slucaj>
+  <Slucaj naziv="Puna stranica">
+    <Stavke>1|2|3|4</Stavke>
+    <Ukupno>4</Ukupno>
+  </Slucaj>
+  <Slucaj naziv="Stranica i ostatak rezultata">
+    <Stavke>11|12</Stavke>
+    <Ukupno>25</Ukupno>
+  </Slucaj>
+</TestSlucajevi>
