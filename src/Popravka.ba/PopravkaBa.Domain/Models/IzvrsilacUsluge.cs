@@ -32,7 +32,6 @@ namespace PopravkaBa.Domain.Models
         private const int MinRecenzijaPouzdan = 3;
         private const decimal MinOcjenaPouzdan = 4.0m;
 
-        // Nivoi se provjeravaju od najvišeg prema najnižem; prvi ispunjen se vraća.
         public NivoIzvrsioca DajNivo()
         {
             if (Ispunjava(MinPoslovaTopMajstor, MinRecenzijaTopMajstor, MinOcjenaTopMajstor))
