@@ -18,26 +18,26 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
         private Mock<IAmazonS3> _s3 = null!;
         private S3FileStorageAdapter _adapter = null!;
-        private PutObjectRequest? _putZahtjev;
-        private DeleteObjectRequest? _deleteZahtjev;
-        private GetPreSignedUrlRequest? _signedZahtjev;
+        private PutObjectRequest? _staviZahtjev;
+        private DeleteObjectRequest? _obrisiZahtjev;
+        private GetPreSignedUrlRequest? _potpisanZahtjev;
 
         [TestInitialize]
         public void Inicijalizacija()
         {
-            _putZahtjev = null;
-            _deleteZahtjev = null;
-            _signedZahtjev = null;
+            _staviZahtjev = null;
+            _obrisiZahtjev = null;
+            _potpisanZahtjev = null;
 
             _s3 = new Mock<IAmazonS3>();
             _s3.Setup(s => s.PutObjectAsync(It.IsAny<PutObjectRequest>(), It.IsAny<CancellationToken>()))
-               .Callback<PutObjectRequest, CancellationToken>((zahtjev, _) => _putZahtjev = zahtjev)
+               .Callback<PutObjectRequest, CancellationToken>((zahtjev, _) => _staviZahtjev = zahtjev)
                .ReturnsAsync(new PutObjectResponse());
             _s3.Setup(s => s.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), It.IsAny<CancellationToken>()))
-               .Callback<DeleteObjectRequest, CancellationToken>((zahtjev, _) => _deleteZahtjev = zahtjev)
+               .Callback<DeleteObjectRequest, CancellationToken>((zahtjev, _) => _obrisiZahtjev = zahtjev)
                .ReturnsAsync(new DeleteObjectResponse());
             _s3.Setup(s => s.GetPreSignedURL(It.IsAny<GetPreSignedUrlRequest>()))
-               .Callback<GetPreSignedUrlRequest>(zahtjev => _signedZahtjev = zahtjev)
+               .Callback<GetPreSignedUrlRequest>(zahtjev => _potpisanZahtjev = zahtjev)
                .Returns("https://potpisani.link.test/prilog");
 
             _adapter = KreirajAdapter(PublicBaseUrl);
@@ -51,15 +51,12 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
                 PublicBaseURL = publicBaseUrl
             }));
 
-        // Eksterni izvor podataka (CSV)
         public static IEnumerable<object[]> IzvuciIzCsv() =>
             File.ReadLines(CsvPutanja)
                 .Skip(1)
                 .Where(red => !string.IsNullOrWhiteSpace(red))
                 .Select(red => red.Split(','))
                 .Select(k => new object[] { k[0], k[1] });
-
-        #region Extension
 
         [TestMethod]
         [DynamicData(nameof(IzvuciIzCsv), DynamicDataSourceType.Method)]
@@ -78,10 +75,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             Assert.AreEqual(string.Empty, ekstenzija);
         }
 
-        #endregion
-
-        #region SpremiPublic
-
         [TestMethod]
         public async Task SpremiPublic_Slika_SpremaUJavniBucketSaIspravnimPodacima()
         {
@@ -89,11 +82,11 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             await _adapter.SpremiPublic(sadrzaj, "image/png");
 
-            Assert.IsNotNull(_putZahtjev);
-            Assert.AreEqual(PublicBucket, _putZahtjev.BucketName);
-            Assert.AreEqual("image/png", _putZahtjev.ContentType);
-            Assert.AreSame(sadrzaj, _putZahtjev.InputStream);
-            Assert.AreEqual(true, _putZahtjev.DisablePayloadSigning);
+            Assert.IsNotNull(_staviZahtjev);
+            Assert.AreEqual(PublicBucket, _staviZahtjev.BucketName);
+            Assert.AreEqual("image/png", _staviZahtjev.ContentType);
+            Assert.AreSame(sadrzaj, _staviZahtjev.InputStream);
+            Assert.AreEqual(true, _staviZahtjev.DisablePayloadSigning);
         }
 
         [TestMethod]
@@ -103,7 +96,7 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             await _adapter.SpremiPublic(sadrzaj, "image/jpeg");
 
-            StringAssert.Matches(_putZahtjev!.Key, new System.Text.RegularExpressions.Regex(@"^slike/[0-9a-f]{32}\.jpg$"));
+            StringAssert.Matches(_staviZahtjev!.Key, new System.Text.RegularExpressions.Regex(@"^slike/[0-9a-f]{32}\.jpg$"));
         }
 
         [TestMethod]
@@ -113,7 +106,7 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             await _adapter.SpremiPublic(sadrzaj, "text/plain");
 
-            StringAssert.Matches(_putZahtjev!.Key, new System.Text.RegularExpressions.Regex(@"^slike/[0-9a-f]{32}$"));
+            StringAssert.Matches(_staviZahtjev!.Key, new System.Text.RegularExpressions.Regex(@"^slike/[0-9a-f]{32}$"));
         }
 
         [TestMethod]
@@ -123,7 +116,7 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             var url = await _adapter.SpremiPublic(sadrzaj, "image/webp");
 
-            Assert.AreEqual($"{PublicBaseUrl}/{_putZahtjev!.Key}", url);
+            Assert.AreEqual($"{PublicBaseUrl}/{_staviZahtjev!.Key}", url);
         }
 
         [TestMethod]
@@ -159,10 +152,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
                 () => _adapter.SpremiPublic(sadrzaj, "image/png"));
         }
 
-        #endregion
-
-        #region SpremiPrivate
-
         [TestMethod]
         public async Task SpremiPrivate_Dokument_SpremaUPrivatniBucketSaIspravnimPodacima()
         {
@@ -170,11 +159,11 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             await _adapter.SpremiPrivate(sadrzaj, "rjesenje.pdf", "application/pdf");
 
-            Assert.IsNotNull(_putZahtjev);
-            Assert.AreEqual(PrivateBucket, _putZahtjev.BucketName);
-            Assert.AreEqual("application/pdf", _putZahtjev.ContentType);
-            Assert.AreSame(sadrzaj, _putZahtjev.InputStream);
-            Assert.AreEqual(true, _putZahtjev.DisablePayloadSigning);
+            Assert.IsNotNull(_staviZahtjev);
+            Assert.AreEqual(PrivateBucket, _staviZahtjev.BucketName);
+            Assert.AreEqual("application/pdf", _staviZahtjev.ContentType);
+            Assert.AreSame(sadrzaj, _staviZahtjev.InputStream);
+            Assert.AreEqual(true, _staviZahtjev.DisablePayloadSigning);
         }
 
         [TestMethod]
@@ -185,7 +174,7 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             var kljuc = await _adapter.SpremiPrivate(sadrzaj, "uvjerenje.docx", "application/octet-stream");
 
             StringAssert.Matches(kljuc, new System.Text.RegularExpressions.Regex(@"^prilozi/[0-9a-f]{32}\.docx$"));
-            Assert.AreEqual(kljuc, _putZahtjev!.Key);
+            Assert.AreEqual(kljuc, _staviZahtjev!.Key);
         }
 
         [TestMethod]
@@ -197,10 +186,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             StringAssert.Matches(kljuc, new System.Text.RegularExpressions.Regex(@"^prilozi/[0-9a-f]{32}$"));
         }
-
-        #endregion
-
-        #region GetSignedURL
 
         [TestMethod]
         public void GetSignedURL_Kljuc_VracaUrlKojiVratiS3()
@@ -215,11 +200,11 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
         {
             _adapter.GetSignedURL("prilozi/abc.pdf", TimeSpan.FromMinutes(15));
 
-            Assert.IsNotNull(_signedZahtjev);
-            Assert.AreEqual(PrivateBucket, _signedZahtjev.BucketName);
-            Assert.AreEqual("prilozi/abc.pdf", _signedZahtjev.Key);
-            Assert.AreEqual(HttpVerb.GET, _signedZahtjev.Verb);
-            Assert.AreEqual(Protocol.HTTPS, _signedZahtjev.Protocol);
+            Assert.IsNotNull(_potpisanZahtjev);
+            Assert.AreEqual(PrivateBucket, _potpisanZahtjev.BucketName);
+            Assert.AreEqual("prilozi/abc.pdf", _potpisanZahtjev.Key);
+            Assert.AreEqual(HttpVerb.GET, _potpisanZahtjev.Verb);
+            Assert.AreEqual(Protocol.HTTPS, _potpisanZahtjev.Protocol);
         }
 
         [TestMethod]
@@ -231,12 +216,8 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             _adapter.GetSignedURL("prilozi/abc.pdf", trajanje);
 
             var poslije = DateTime.UtcNow;
-            Assert.IsTrue(_signedZahtjev!.Expires >= prije.Add(trajanje) && _signedZahtjev.Expires <= poslije.Add(trajanje));
+            Assert.IsTrue(_potpisanZahtjev!.Expires >= prije.Add(trajanje) && _potpisanZahtjev.Expires <= poslije.Add(trajanje));
         }
-
-        #endregion
-
-        #region ObrisiPublic / ObrisiPrivate
 
         [TestMethod]
         [DataRow("https://cdn.popravka.test", DisplayName = "Bazni URL bez kose crte")]
@@ -247,9 +228,9 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             await adapter.ObrisiPublic("https://cdn.popravka.test/slike/abc123.jpg");
 
-            Assert.IsNotNull(_deleteZahtjev);
-            Assert.AreEqual(PublicBucket, _deleteZahtjev.BucketName);
-            Assert.AreEqual("slike/abc123.jpg", _deleteZahtjev.Key);
+            Assert.IsNotNull(_obrisiZahtjev);
+            Assert.AreEqual(PublicBucket, _obrisiZahtjev.BucketName);
+            Assert.AreEqual("slike/abc123.jpg", _obrisiZahtjev.Key);
         }
 
         [TestMethod]
@@ -257,9 +238,9 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
         {
             await _adapter.ObrisiPrivate("prilozi/abc123.pdf");
 
-            Assert.IsNotNull(_deleteZahtjev);
-            Assert.AreEqual(PrivateBucket, _deleteZahtjev.BucketName);
-            Assert.AreEqual("prilozi/abc123.pdf", _deleteZahtjev.Key);
+            Assert.IsNotNull(_obrisiZahtjev);
+            Assert.AreEqual(PrivateBucket, _obrisiZahtjev.BucketName);
+            Assert.AreEqual("prilozi/abc123.pdf", _obrisiZahtjev.Key);
         }
 
         [TestMethod]
@@ -271,7 +252,5 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             _s3.Verify(s => s.DeleteObjectAsync(It.IsAny<DeleteObjectRequest>(), izvor.Token), Times.Once);
         }
-
-        #endregion
     }
 }

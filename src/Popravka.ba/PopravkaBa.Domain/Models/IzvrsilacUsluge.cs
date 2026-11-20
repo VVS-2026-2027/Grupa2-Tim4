@@ -23,20 +23,30 @@ namespace PopravkaBa.Domain.Models
         public void DodajKategoriju(Kategorija kategorija) { }
         public void UkloniKategoriju(int kategorijaID) { }
 
+        // Pragovi za nivo izvršioca (minimalni broj poslova, recenzija i prosječna ocjena)
+        private const int MinPoslovaTopMajstor = 10;
+        private const int MinRecenzijaTopMajstor = 5;
+        private const decimal MinOcjenaTopMajstor = 4.5m;
 
+        private const int MinPoslovaPouzdan = 3;
+        private const int MinRecenzijaPouzdan = 3;
+        private const decimal MinOcjenaPouzdan = 4.0m;
+
+        // Nivoi se provjeravaju od najvišeg prema najnižem; prvi ispunjen se vraća.
         public NivoIzvrsioca DajNivo()
         {
-            if (BrojZavrsenihPoslova >= 10)
-            {
-                if (BrojRecenzija >= 5 && ProsjecnaOcjena >= 4.5m) return NivoIzvrsioca.TopMajstor;
-                if (BrojRecenzija >= 3 && ProsjecnaOcjena >= 4.0m) return NivoIzvrsioca.Pouzdan;
-                return NivoIzvrsioca.Novi;
-            }
-            if (BrojZavrsenihPoslova >= 3)
-            {
-                if (BrojRecenzija >= 3 && ProsjecnaOcjena >= 4.0m) return NivoIzvrsioca.Pouzdan;
-            }
+            if (Ispunjava(MinPoslovaTopMajstor, MinRecenzijaTopMajstor, MinOcjenaTopMajstor))
+                return NivoIzvrsioca.TopMajstor;
+
+            if (Ispunjava(MinPoslovaPouzdan, MinRecenzijaPouzdan, MinOcjenaPouzdan))
+                return NivoIzvrsioca.Pouzdan;
+
             return NivoIzvrsioca.Novi;
         }
+
+        private bool Ispunjava(int minPoslova, int minRecenzija, decimal minOcjena) =>
+            BrojZavrsenihPoslova >= minPoslova
+            && BrojRecenzija >= minRecenzija
+            && ProsjecnaOcjena >= minOcjena;
     }
 }

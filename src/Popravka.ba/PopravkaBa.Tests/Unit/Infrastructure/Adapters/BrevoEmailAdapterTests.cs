@@ -61,13 +61,10 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             DatumObrade = new DateTime(2026, 11, 20)
         };
 
-        // Podklasa samo za test podrazumijevane factory metode
         private sealed class IzlozeniBrevoAdapter(IOptions<BrevoEmailOptions> opcije) : BrevoEmailAdapter(opcije)
         {
             public ISmtpClient Kreiraj() => KreirajSmtpKlijent();
         }
-
-        #region PosaljiEmailAsync(primalac, subjekt, tijelo)
 
         [TestMethod]
         public async Task PosaljiEmailAsync_IspravniPodaci_PovezujeSeNaHostIPortIzOpcija()
@@ -184,10 +181,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             _smtp.Verify(s => s.Dispose(), Times.Once);
         }
 
-        #endregion
-
-        #region PosaljiEmailAsync(EmailNotifikacijaOglas)
-
         [TestMethod]
         public async Task PosaljiEmailAsync_Notifikacija_SaljeNaEmailPrimaocaSaFiksnimSubjektom()
         {
@@ -210,10 +203,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
             StringAssert.Contains(_poslanaPoruka!.HtmlBody, "Popravka bojlera");
             StringAssert.Contains(_poslanaPoruka.HtmlBody, "Amar");
         }
-
-        #endregion
-
-        #region PosaljiEmailAsync(EmailVerifikacijaFirme, zaAdmina)
 
         [TestMethod]
         public async Task PosaljiEmailAsync_VerifikacijaZaAdmina_SaljeAdminuSaNazivomFirmeUSubjektu()
@@ -246,8 +235,6 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Adapters
 
             StringAssert.Contains(_poslanaPoruka!.HtmlBody, "Vaša firma je verificirana");
         }
-
-        #endregion
 
         [TestMethod]
         public void KreirajSmtpKlijent_Podrazumijevano_VracaMailKitSmtpClient()
