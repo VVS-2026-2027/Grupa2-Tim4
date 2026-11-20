@@ -23,13 +23,20 @@ namespace PopravkaBa.Domain.Models
         public void DodajKategoriju(Kategorija kategorija) { }
         public void UkloniKategoriju(int kategorijaID) { }
 
-        // TDD (RED): nivo izvršioca na osnovu broja završenih poslova, recenzija i prosječne ocjene
-        //  - TopMajstor: >= 10 završenih poslova, >= 5 recenzija, ocjena >= 4.5
-        //  - Pouzdan:    >= 3 završena posla,    >= 3 recenzije, ocjena >= 4.0
-        //  - Novi:       sve ostalo
+
         public NivoIzvrsioca DajNivo()
         {
-            throw new NotImplementedException();
+            if (BrojZavrsenihPoslova >= 10)
+            {
+                if (BrojRecenzija >= 5 && ProsjecnaOcjena >= 4.5m) return NivoIzvrsioca.TopMajstor;
+                if (BrojRecenzija >= 3 && ProsjecnaOcjena >= 4.0m) return NivoIzvrsioca.Pouzdan;
+                return NivoIzvrsioca.Novi;
+            }
+            if (BrojZavrsenihPoslova >= 3)
+            {
+                if (BrojRecenzija >= 3 && ProsjecnaOcjena >= 4.0m) return NivoIzvrsioca.Pouzdan;
+            }
+            return NivoIzvrsioca.Novi;
         }
     }
 }
