@@ -10,27 +10,49 @@ namespace PopravkaBa.Tests.Unit.Infrastructure.Repositories;
 public class VerifikacijaFirmeRepositoryCoverageTests
 {
     [TestMethod]
-    public async Task SveMetode_DodajNajnovijuPoFirmiNaCekanjuPoIdISacuvaj_Rade()
+    public async Task DodajAsync_NovaVerifikacija_SpremaIPretrazujePoFirmiIPoId()
     {
         await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        context.Firme.Add(FirmaPopunjena("f1"));
+        await context.SaveChangesAsync();
         var repository = new VerifikacijaFirmeRepository(context);
-        var firma = FirmaPopunjena("f1");
-        var verifikacija = EmailPopunjena(1,"f1",Status.NaCekanju);
+        var verifikacija = EmailPopunjena(1, "f1", Status.NaCekanju);
 
         await repository.DodajAsync(verifikacija);
-        Assert.IsNotNull(await context.EmailVerifikacijaFirme.FindAsync(1));
+
         Assert.IsNotNull(await repository.DajZadnjuZaFirmuAsync("f1"));
-        Assert.IsNotNull(await context.EmailVerifikacijaFirme.FindAsync(1));
-        _ = await repository.DajPoIdAsync(1);
+        Assert.IsNotNull(await repository.DajPoIdAsync(1));
+    }
 
-        context.Firme.Add(firma);
+    [TestMethod]
+    public async Task DajNaCekanjuAsync_PostojećaFirmaNaCekanju_VracaJednu()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        context.Firme.Add(FirmaPopunjena("f1"));
+        context.EmailVerifikacijaFirme.Add(EmailPopunjena(1, "f1", Status.NaCekanju));
         await context.SaveChangesAsync();
-        Assert.AreEqual(1,(await repository.DajNaCekanjuAsync()).Count());
+        var repository = new VerifikacijaFirmeRepository(context);
 
-        verifikacija.StatusVerifikacije=Status.Prihvaceno;
+        var rezultat = await repository.DajNaCekanjuAsync();
+
+        Assert.AreEqual(1, rezultat.Count());
+    }
+
+    [TestMethod]
+    public async Task SacuvajAsync_VerifikacijaPromijenjenaStatus_PonovoVracaAzuriraniStatus()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        context.Firme.Add(FirmaPopunjena("f1"));
+        var verifikacija = EmailPopunjena(1, "f1", Status.NaCekanju);
+        context.EmailVerifikacijaFirme.Add(verifikacija);
+        await context.SaveChangesAsync();
+        var repository = new VerifikacijaFirmeRepository(context);
+
+        verifikacija.StatusVerifikacije = Status.Prihvaceno;
         await repository.SacuvajAsync();
-        Assert.AreEqual(Status.Prihvaceno,(await repository.DajZadnjuZaFirmuAsync("f1"))!.StatusVerifikacije);
-        Assert.AreEqual(0,(await repository.DajNaCekanjuAsync()).Count());
+
+        Assert.AreEqual(Status.Prihvaceno, (await repository.DajZadnjuZaFirmuAsync("f1"))!.StatusVerifikacije);
+        Assert.AreEqual(0, (await repository.DajNaCekanjuAsync()).Count());
     }
 
     [TestMethod]

@@ -156,16 +156,149 @@ public class OglasRepositoryCoverageTests
     }
 
     [TestMethod]
-    public async Task AgregiraniOglasRepository_SpojiSortiraILimitira()
+    public async Task DajNedavneAsync_DvaIzvora_SpajaSortiraILimitira()
     {
-        await using var context=new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
-        var usluge=new Mock<IOglasUslugeRepository>();
-        usluge.Setup(r=>r.DajNedavneAsync(5)).ReturnsAsync([new OglasUsluge{OglasID=1,DatumObjave=new DateTime(2026,11,20)}]);
-        var radno=new Mock<IOglasRadnoMjestoRepository>();
-        radno.Setup(r=>r.DajNedavneAsync(5)).ReturnsAsync([new OglasRadnoMjesto{OglasID=2,DatumObjave=new DateTime(2026,11,21)}]);
-        var repository=new OglasRepository(context,usluge.Object,radno.Object);
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(5)).ReturnsAsync([new OglasUsluge { OglasID = 1, DatumObjave = new DateTime(2026, 11, 20) }]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(5)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 2, DatumObjave = new DateTime(2026, 11, 21) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
 
-        var rezultat=(await repository.DajNedavneAsync(5))!.ToList();
-        Assert.AreEqual(2,rezultat.Count);Assert.AreEqual(2,rezultat[0].OglasID);
+        var rezultat = (await repository.DajNedavneAsync(5))!.ToList();
+
+        Assert.AreEqual(2, rezultat.Count);
+        Assert.AreEqual(2, rezultat[0].OglasID);
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_NemaOglasa_VracaPraznuKolekciju()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(5)).ReturnsAsync([]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(5)).ReturnsAsync([]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = await repository.DajNedavneAsync(5);
+
+        Assert.AreEqual(0, rezultat!.Count());
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_NultiIzvor_BacaArgumentNullException()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync((IEnumerable<OglasUsluge>?)null);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 7, DatumObjave = new DateTime(2026, 11, 22) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        await Assert.ThrowsExceptionAsync<ArgumentNullException>(async () => await repository.DajNedavneAsync(3));
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_TopNJedan_VracaJedanNajnovijiOglas()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(1)).ReturnsAsync([new OglasUsluge { OglasID = 1, DatumObjave = new DateTime(2026, 11, 20) }]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(1)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 2, DatumObjave = new DateTime(2026, 11, 21) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = (await repository.DajNedavneAsync(1))!.ToList();
+
+        Assert.AreEqual(1, rezultat.Count);
+        Assert.AreEqual(2, rezultat[0].OglasID);
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_TopNZnula_VracaPraznuKolekciju()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(0)).ReturnsAsync([new OglasUsluge { OglasID = 1, DatumObjave = new DateTime(2026, 11, 20) }]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(0)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 2, DatumObjave = new DateTime(2026, 11, 21) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = await repository.DajNedavneAsync(0);
+
+        Assert.AreEqual(0, rezultat!.Count());
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_NultiRadniIzvor_VracaSamoUsluzneOglase()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync([new OglasUsluge { OglasID = 1, DatumObjave = new DateTime(2026, 11, 20) }]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync((IEnumerable<OglasRadnoMjesto>?)null);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = (await repository.DajNedavneAsync(3))!.ToList();
+
+        Assert.AreEqual(1, rezultat.Count);
+        Assert.AreEqual(1, rezultat[0].OglasID);
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_PrazanUsluzniIPostojećiRadniIzvor_VracaSamoRadneOglase()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync([]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(3)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 7, DatumObjave = new DateTime(2026, 11, 22) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = (await repository.DajNedavneAsync(3))!.ToList();
+
+        Assert.AreEqual(1, rezultat.Count);
+        Assert.AreEqual(7, rezultat[0].OglasID);
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_RadniIzvorBacaIzuzetak_PropagiraIzuzetak()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(5)).ReturnsAsync([]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(5)).ThrowsAsync(new InvalidOperationException("Greška radnog izvora"));
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () => await repository.DajNedavneAsync(5));
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_NegativniTopN_VracaPraznuKolekciju()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(-1)).ReturnsAsync([new OglasUsluge { OglasID = 1, DatumObjave = new DateTime(2026, 11, 20) }]);
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        radno.Setup(repository => repository.DajNedavneAsync(-1)).ReturnsAsync([new OglasRadnoMjesto { OglasID = 2, DatumObjave = new DateTime(2026, 11, 21) }]);
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        var rezultat = await repository.DajNedavneAsync(-1);
+
+        Assert.AreEqual(0, rezultat!.Count());
+    }
+
+    [TestMethod]
+    public async Task DajNedavneAsync_IzvorBacaIzuzetak_PropagiraIzuzetak()
+    {
+        await using var context = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options);
+        var usluge = new Mock<IOglasUslugeRepository>();
+        usluge.Setup(repository => repository.DajNedavneAsync(5)).ThrowsAsync(new InvalidOperationException("Greška izvora usluga"));
+        var radno = new Mock<IOglasRadnoMjestoRepository>();
+        var repository = new OglasRepository(context, usluge.Object, radno.Object);
+
+        await Assert.ThrowsExceptionAsync<InvalidOperationException>(async () => await repository.DajNedavneAsync(5));
     }
 }
