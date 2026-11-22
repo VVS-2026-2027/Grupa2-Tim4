@@ -9,14 +9,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new KreirajPrijavaRadnoMjestoDto
             {
                 OglasID = 8,
                 MajstorID = "majstor-1"
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(8, dto.OglasID);
             Assert.AreEqual("majstor-1", dto.MajstorID);
         }
@@ -24,34 +24,34 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = new KreirajPrijavaRadnoMjestoDto
             {
                 OglasID = 1,
                 MajstorID = "majstor-1"
             };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
         [TestMethod]
         public void NedostajeMajstor_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = new KreirajPrijavaRadnoMjestoDto
             {
                 OglasID = 1,
                 MajstorID = null!
             };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(KreirajPrijavaRadnoMjestoDto.MajstorID)));
         }
     }

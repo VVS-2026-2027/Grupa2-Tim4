@@ -10,10 +10,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_VremenaSuNull()
         {
-            // Act
+            // Akcija
             var dto = new RadnoVrijemeDto();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.OtvorenoOd);
             Assert.IsNull(dto.OtvorenoDo);
         }
@@ -21,14 +21,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljenaVremena_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new RadnoVrijemeDto
             {
                 OtvorenoOd = new TimeSpan(8, 0, 0),
                 OtvorenoDo = new TimeSpan(16, 30, 0)
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(new TimeSpan(8, 0, 0), dto.OtvorenoOd);
             Assert.AreEqual(new TimeSpan(16, 30, 0), dto.OtvorenoDo);
         }
@@ -40,17 +40,17 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ZapamtiMeJeFalse()
         {
-            // Act
+            // Akcija
             var dto = new LoginDto();
 
-            // Assert
+            // Provjera
             Assert.IsFalse(dto.ZapamtiMe);
         }
 
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new LoginDto
             {
                 EmailUsername = "korisnik@example.com",
@@ -58,7 +58,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 ZapamtiMe = true
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("korisnik@example.com", dto.EmailUsername);
             Assert.AreEqual("Lozinka123!", dto.Lozinka);
             Assert.IsTrue(dto.ZapamtiMe);
@@ -67,13 +67,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void Validacija_BezEmailaIBezLozinke_VracaGreskeZaObaPolja()
         {
-            // Arrange
+            // Priprema
             var dto = new LoginDto { EmailUsername = null!, Lozinka = null! };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(2, rezultati.Count);
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(LoginDto.EmailUsername)));
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(LoginDto.Lozinka)));
@@ -82,17 +82,17 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void Validacija_ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = new LoginDto
             {
                 EmailUsername = "korisnik",
                 Lozinka = "tajna"
             };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
     }
@@ -114,10 +114,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_OpcijaPoljaSuNull()
         {
-            // Act
+            // Akcija
             var dto = new RegistracijaKlijentaDto();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.PotvrdaLozinke);
             Assert.IsNull(dto.MjestaID);
         }
@@ -125,12 +125,12 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var mjesta = new List<int> { 2, 4 };
             var dto = ValidanDto();
             dto.MjestaID = mjesta;
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("klijent1", dto.KorisnickoIme);
             Assert.AreEqual("Amina", dto.Ime);
             Assert.AreEqual("Hadzic", dto.Prezime);
@@ -147,84 +147,84 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(51, false)]
         public void KorisnickoIme_PostujeGraniceDuzine(int duzina, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KorisnickoIme = new string('k', duzina);
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NeispravanEmail_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Email = "nije-email";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaKlijentaDto.Email)));
         }
 
         [TestMethod]
         public void NedostajeLozinka_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Lozinka = null!;
             dto.PotvrdaLozinke = null;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaKlijentaDto.Lozinka)));
         }
 
         [TestMethod]
         public void PotvrdaLozinkeSeNePoklapa_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.PotvrdaLozinke = "DrugaLozinka1!";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaKlijentaDto.PotvrdaLozinke)));
         }
 
         [TestMethod]
         public void PraznaListaMjesta_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MjestaID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaKlijentaDto.MjestaID)));
         }
 
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
     }
@@ -247,10 +247,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_KolekcijeSuNull()
         {
-            // Act
+            // Akcija
             var dto = new RegistracijaMajstoraDto();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.PotvrdaLozinke);
             Assert.IsNull(dto.KategorijeID);
             Assert.IsNull(dto.MjestaID);
@@ -259,14 +259,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var kategorije = new List<int> { 2, 6 };
             var mjesta = new List<int> { 5 };
             var dto = ValidanDto();
             dto.KategorijeID = kategorije;
             dto.MjestaID = mjesta;
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("majstor1", dto.KorisnickoIme);
             Assert.AreEqual("Milan", dto.Ime);
             Assert.AreEqual("Jovanovic", dto.Prezime);
@@ -286,84 +286,84 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow("loz1", false)]
         public void Lozinka_PostujePraviloOsamZnakovaICifre(string lozinka, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Lozinka = lozinka;
             dto.PotvrdaLozinke = lozinka;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NeispravanEmail_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Email = "majstor.example.com";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaMajstoraDto.Email)));
         }
 
         [TestMethod]
         public void PotvrdaLozinkeSeNePoklapa_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.PotvrdaLozinke = "NestoDrugo123!";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaMajstoraDto.PotvrdaLozinke)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaMajstoraDto.KategorijeID)));
         }
 
         [TestMethod]
         public void NedostajeListaMjesta_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MjestaID = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaMajstoraDto.MjestaID)));
         }
 
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
     }
@@ -387,10 +387,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaZadanuVelicinuMikro()
         {
-            // Act
+            // Akcija
             var dto = new RegistracijaFirmeDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(VelicinaFirme.Mikro, dto.VelicinaFirme);
             Assert.IsNull(dto.PotvrdaLozinke);
             Assert.IsNull(dto.WebStranica);
@@ -401,7 +401,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var kategorije = new List<int> { 4, 9 };
             var mjesta = new List<int> { 2 };
             var dto = ValidanDto();
@@ -409,7 +409,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
             dto.MjestaID = mjesta;
             dto.VelicinaFirme = VelicinaFirme.Velika;
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("firma1", dto.KorisnickoIme);
             Assert.AreEqual("Popravka d.o.o.", dto.NazivFirme);
             Assert.AreEqual("firma@example.com", dto.Email);
@@ -427,83 +427,83 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(null, true)]
         public void WebStranica_PostujeUrlPravilo(string? webStranica, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.WebStranica = webStranica;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NeispravanEmail_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Email = "firma@";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaFirmeDto.Email)));
         }
 
         [TestMethod]
         public void PotvrdaLozinkeSeNePoklapa_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.PotvrdaLozinke = "NestoDrugo123!";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaFirmeDto.PotvrdaLozinke)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaFirmeDto.KategorijeID)));
         }
 
         [TestMethod]
         public void PraznaListaMjesta_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MjestaID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(RegistracijaFirmeDto.MjestaID)));
         }
 
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
     }

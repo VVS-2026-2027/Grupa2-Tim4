@@ -21,10 +21,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("Majstor za vodoinstalacije", dto.Naslov);
             Assert.AreEqual("Popravke u domacinstvu", dto.Opis);
             Assert.AreEqual(1, dto.MjestoID);
@@ -37,27 +37,27 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
         [TestMethod]
         public void SlikaNijeObavezna_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Slika = null;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -67,56 +67,56 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(-0.01, false)]
         public void MinCijena_PostujeGranicu(double minCijena, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MinCijena = minCijena;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NedostajeNaslov_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Naslov = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasMajstoraDto.Naslov)));
         }
 
         [TestMethod]
         public void NedostajeOpis_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Opis = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasMajstoraDto.Opis)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasMajstoraDto.KategorijeID)));
         }
     }
@@ -139,10 +139,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(7, dto.OglasID);
             Assert.AreEqual("Azuriran oglas", dto.Naslov);
             Assert.AreEqual("Azuriran opis oglasa", dto.Opis);
@@ -156,69 +156,69 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
         [TestMethod]
         public void NegativnaMinCijena_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MinCijena = -5;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasMajstoraDto.MinCijena)));
         }
 
         [TestMethod]
         public void NedostajeNaslov_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Naslov = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasMajstoraDto.Naslov)));
         }
 
         [TestMethod]
         public void NedostajeOpis_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Opis = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasMajstoraDto.Opis)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasMajstoraDto.KategorijeID)));
         }
     }

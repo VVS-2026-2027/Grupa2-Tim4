@@ -8,10 +8,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaZadaneKolekcije()
         {
-            // Act
+            // Akcija
             var dto = new RezultatPretrageDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(string.Empty, dto.AktivniTab);
             Assert.IsNotNull(dto.DostupniTabovi);
             Assert.AreEqual(0, dto.DostupniTabovi.Count());
@@ -29,7 +29,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var tabovi = new List<string> { "izvrsioci", "usluge", "poslovi" };
             var izvrsioci = new List<IzvrsilacListDto> { new() { Id = "majstor-1" } };
             var usluge = new List<OglasUslugeListDto> { new() { Id = 1 } };
@@ -47,7 +47,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 UkupnoStavki = 35
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("izvrsioci", dto.AktivniTab);
             CollectionAssert.AreEqual(tabovi, dto.DostupniTabovi.ToList());
             CollectionAssert.AreEqual(izvrsioci, dto.Izvrsioci.ToList());
@@ -79,7 +79,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
             int ocekivanoOd,
             int ocekivanoDo)
         {
-            // Arrange
+            // Priprema
             var dto = new RezultatPretrageDto
             {
                 UkupnoStavki = ukupnoStavki,
@@ -87,7 +87,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 StavkiPoStranici = stavkiPoStranici
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(ocekivanoStranica, dto.UkupnoStranica);
             Assert.AreEqual(ocekivanoOd, dto.PrikazOd);
             Assert.AreEqual(ocekivanoDo, dto.PrikazDo);
@@ -100,7 +100,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new IzvrsilacListDto
             {
                 Id = "majstor-1",
@@ -116,7 +116,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 PrvaKategorija = "Vodovod"
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("majstor-1", dto.Id);
             Assert.AreEqual("majstor1", dto.Username);
             Assert.AreEqual("Milan Jovanovic", dto.DisplayName);
@@ -137,7 +137,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var datum = new DateTime(2026, 11, 10);
             var dto = new OglasUslugeListDto
             {
@@ -153,7 +153,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Lokacija = "Tuzla"
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(3, dto.Id);
             Assert.AreEqual("Popravka bojlera", dto.Naslov);
             Assert.AreEqual("Bojler ne grije vodu", dto.Opis);
@@ -173,7 +173,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var datum = new DateTime(2026, 11, 12);
             var dto = new OglasRadnoMjestoListDto
             {
@@ -189,7 +189,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Lokacija = "Mostar"
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(6, dto.Id);
             Assert.AreEqual("Stolar", dto.Naslov);
             Assert.AreEqual("Potreban stolar za plakare", dto.Opis);

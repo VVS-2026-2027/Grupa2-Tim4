@@ -10,7 +10,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var pocetak = new DateTime(2026, 11, 25, 9, 0, 0);
             var kraj = new DateTime(2026, 11, 27, 17, 0, 0);
 
@@ -34,7 +34,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Poruka = "Mogu poceti odmah."
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(15, dto.PonudaId);
             Assert.AreEqual("majstor-1", dto.IzvrsilacId);
             Assert.AreEqual("majstor1", dto.IzvrsilacUsername);
@@ -70,10 +70,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_TipIsplateJePoSatu()
         {
-            // Act
+            // Akcija
             var dto = new KreirajPonudaUslugeDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(TipIsplate.PoSatu, dto.TipIsplate);
             Assert.IsNull(dto.DatumOcekivanogZavrsetka);
             Assert.IsNull(dto.Cijena);
@@ -83,10 +83,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(5, dto.OglasUslugeID);
             Assert.AreEqual(new DateTime(2026, 12, 1), dto.DatumPocetkaUsluge);
             Assert.AreEqual(new DateTime(2026, 12, 3), dto.DatumOcekivanogZavrsetka);
@@ -98,13 +98,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -115,14 +115,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(null, true)]
         public void Cijena_PostujeGranicu(int? cijena, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Cijena = cijena;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -132,14 +132,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(501, false)]
         public void Poruka_PostujeMaksimalnuDuzinu(int duzina, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Poruka = new string('p', duzina);
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
     }
@@ -150,10 +150,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void MozeSeKreirati()
         {
-            // Act
+            // Akcija
             var dto = new UrediPonudaUslugeDto();
 
-            // Assert
+            // Provjera
             Assert.IsNotNull(dto);
         }
     }

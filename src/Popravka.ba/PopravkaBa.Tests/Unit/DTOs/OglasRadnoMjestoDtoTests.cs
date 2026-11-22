@@ -27,10 +27,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_BrojIzvrsilacaJeJedan()
         {
-            // Act
+            // Akcija
             var dto = new ObjaviOglasRadnoMjestoDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(1, dto.BrojIzvrsilaca);
             Assert.IsNull(dto.MinPrihod);
             Assert.IsNull(dto.MaxPrihod);
@@ -41,10 +41,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("Vozac kamiona", dto.Naslov);
             Assert.AreEqual("Potreban vozac sa iskustvom", dto.Opis);
             Assert.AreEqual(1, dto.MjestoID);
@@ -66,13 +66,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -82,14 +82,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(2147483647, true)]
         public void BrojIzvrsilaca_PostujeGranicu(int brojIzvrsilaca, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.BrojIzvrsilaca = brojIzvrsilaca;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -99,15 +99,15 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(1000, true)]
         public void Prihodi_PostujuGranicu(int prihod, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MinPrihod = prihod;
             dto.MaxPrihod = prihod;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -117,85 +117,85 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(4, false)]
         public void Uvjeti_PostujuMaksimalnoTriStavke(int brojUvjeta, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Uvjeti = Enumerable.Range(1, brojUvjeta)
                                    .Select(i => $"Uvjet {i}")
                                    .ToList();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NedostajeNaslov_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Naslov = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasRadnoMjestoDto.Naslov)));
         }
 
         [TestMethod]
         public void NedostajeOpis_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Opis = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasRadnoMjestoDto.Opis)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(ObjaviOglasRadnoMjestoDto.KategorijeID)));
         }
 
         [TestMethod]
         public void Validate_BezPrihoda_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = new ObjaviOglasRadnoMjestoDto { MinPrihod = null, MaxPrihod = null };
 
-            // Act
+            // Akcija
             var rezultati = dto.Validate(new ValidationContext(dto)).ToList();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
         [TestMethod]
         public void Validate_MaksimalniManjiOdMinimalnog_VracaGreskuNaNivouMaksimalnog()
         {
-            // Arrange
+            // Priprema
             var servisi = new Mock<IServiceProvider>();
             var dto = new ObjaviOglasRadnoMjestoDto { MinPrihod = 2000, MaxPrihod = 1000 };
 
-            // Act
+            // Akcija
             var rezultati = dto.Validate(new ValidationContext(dto, servisi.Object, null)).ToList();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(1, rezultati.Count);
             CollectionAssert.Contains(
                 rezultati[0].MemberNames.ToList(),
@@ -207,13 +207,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void Validate_JednakiPrihodi_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = new ObjaviOglasRadnoMjestoDto { MinPrihod = 1500, MaxPrihod = 1500 };
 
-            // Act
+            // Akcija
             var rezultati = dto.Validate(new ValidationContext(dto)).ToList();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
     }
@@ -241,10 +241,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_BrojIzvrsilacaJeJedan()
         {
-            // Act
+            // Akcija
             var dto = new UrediOglasRadnoMjestoDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(1, dto.BrojIzvrsilaca);
             Assert.IsNull(dto.MinPrihod);
             Assert.IsNull(dto.MaxPrihod);
@@ -255,10 +255,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(3, dto.OglasID);
             Assert.AreEqual("Azuriran oglas", dto.Naslov);
             Assert.AreEqual("Azuriran opis posla", dto.Opis);
@@ -277,82 +277,82 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
         [TestMethod]
         public void NevalidanBrojIzvrsilaca_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.BrojIzvrsilaca = 0;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasRadnoMjestoDto.BrojIzvrsilaca)));
         }
 
         [TestMethod]
         public void NegativanPrihod_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.MinPrihod = -1;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasRadnoMjestoDto.MinPrihod)));
         }
 
         [TestMethod]
         public void PreviseUvjeta_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Uvjeti = new List<string> { "Jedan", "Dva", "Tri", "Cetiri" };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasRadnoMjestoDto.Uvjeti)));
         }
 
         [TestMethod]
         public void PraznaListaKategorija_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KategorijeID = new List<int>();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(UrediOglasRadnoMjestoDto.KategorijeID)));
         }
 
         [TestMethod]
         public void Validate_MaksimalniManjiOdMinimalnog_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = new UrediOglasRadnoMjestoDto { MinPrihod = 3000, MaxPrihod = 500 };
 
-            // Act
+            // Akcija
             var rezultati = dto.Validate(new ValidationContext(dto)).ToList();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(1, rezultati.Count);
             CollectionAssert.Contains(
                 rezultati[0].MemberNames.ToList(),

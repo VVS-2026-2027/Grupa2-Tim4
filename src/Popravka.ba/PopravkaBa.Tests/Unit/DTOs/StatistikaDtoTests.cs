@@ -10,10 +10,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_RedoviSuPrazni()
         {
-            // Act
+            // Akcija
             var dto = new StatistikaDTO();
 
-            // Assert
+            // Provjera
             Assert.IsNotNull(dto.Redovi);
             Assert.AreEqual(0, dto.Redovi.Count);
             Assert.IsNull(dto.MetaPodaci);
@@ -23,7 +23,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var zadnjeAzuriranje = new DateTime(2026, 11, 21, 12, 0, 0);
             var meta = new StatistikaMetaRecord(
                 zadnjeAzuriranje,
@@ -42,7 +42,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Filter = filter
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(meta, dto.MetaPodaci);
             CollectionAssert.AreEqual(redovi, dto.Redovi.ToList());
             Assert.AreSame(filter, dto.Filter);
@@ -55,10 +55,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaZadaneVrijednosti()
         {
-            // Act
+            // Akcija
             var dto = new StatistikaFilterDTO();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.KategorijaId);
             Assert.IsNull(dto.MjestoId);
             Assert.AreEqual(KoloneStatistike.Ocjena, dto.AktivnaKolona);
@@ -70,7 +70,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new StatistikaFilterDTO
             {
                 KategorijaId = 2,
@@ -81,7 +81,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Mjesec = 11
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(2, dto.KategorijaId);
             Assert.AreEqual(3, dto.MjestoId);
             Assert.AreEqual(KoloneStatistike.Poslovi, dto.AktivnaKolona);
@@ -97,7 +97,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = new StatistikaRedDto
             {
                 Rang = 1,
@@ -112,7 +112,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 BrojPoslova = 32
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(1, dto.Rang);
             Assert.AreEqual("majstor-1", dto.IzvrsilacID);
             Assert.AreEqual("majstor1", dto.Username);

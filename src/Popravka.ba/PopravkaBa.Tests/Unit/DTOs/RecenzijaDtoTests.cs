@@ -16,10 +16,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaPrazanKomentarINultuOcjenu()
         {
-            // Act
+            // Akcija
             var dto = new KreirajRecenzijuDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(string.Empty, dto.Komentar);
             Assert.AreEqual(0, dto.Ocjena);
         }
@@ -27,10 +27,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("majstor-1", dto.IzvrsilacID);
             Assert.AreEqual(5, dto.Ocjena);
             Assert.AreEqual("Odlicna usluga, sve preporuke.", dto.Komentar);
@@ -39,13 +39,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -56,14 +56,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(6, false)]
         public void Ocjena_PostujeOpseg(int ocjena, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Ocjena = ocjena;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -74,28 +74,28 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(1001, false)]
         public void Komentar_PostujeGraniceDuzine(int duzina, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.Komentar = new string('k', duzina);
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NedostajeIzvrsilac_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.IzvrsilacID = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(KreirajRecenzijuDto.IzvrsilacID)));
         }
     }
@@ -112,10 +112,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaPrazanRazlog()
         {
-            // Act
+            // Akcija
             var dto = new PrijaviRecenzijuDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(string.Empty, dto.RazlogPrijave);
             Assert.AreEqual(0, dto.RecenzijaID);
         }
@@ -123,10 +123,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(9, dto.RecenzijaID);
             Assert.AreEqual("Recenzija sadrzi uvrede.", dto.RazlogPrijave);
         }
@@ -134,13 +134,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -151,28 +151,28 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(501, false)]
         public void RazlogPrijave_PostujeGraniceDuzine(int duzina, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.RazlogPrijave = new string('r', duzina);
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NedostajeRazlog_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.RazlogPrijave = null!;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(PrijaviRecenzijuDto.RazlogPrijave)));
         }
     }
@@ -185,14 +185,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(false)]
         public void PostavljeneVrijednosti_SeVracaju(bool obrisi)
         {
-            // Arrange
+            // Priprema
             var dto = new ObradiPrijavuRecenzijeDto
             {
                 RecenzijaID = 11,
                 Obrisi = obrisi
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(11, dto.RecenzijaID);
             Assert.AreEqual(obrisi, dto.Obrisi);
         }

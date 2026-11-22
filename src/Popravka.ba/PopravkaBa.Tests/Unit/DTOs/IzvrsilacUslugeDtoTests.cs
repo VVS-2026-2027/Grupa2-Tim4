@@ -8,30 +8,30 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PretragaIzvrsilacUslugeDto_MozeSeKreirati()
         {
-            // Act
+            // Akcija
             var dto = new PretragaIzvrsilacUslugeDto();
 
-            // Assert
+            // Provjera
             Assert.IsNotNull(dto);
         }
 
         [TestMethod]
         public void ProfilMajstorDto_MozeSeKreirati()
         {
-            // Act
+            // Akcija
             var dto = new ProfilMajstorDto();
 
-            // Assert
+            // Provjera
             Assert.IsNotNull(dto);
         }
 
         [TestMethod]
         public void ProfilFirmaDto_MozeSeKreirati()
         {
-            // Act
+            // Akcija
             var dto = new ProfilFirmaDto();
 
-            // Assert
+            // Provjera
             Assert.IsNotNull(dto);
         }
     }

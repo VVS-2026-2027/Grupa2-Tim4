@@ -9,10 +9,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaZadaneVrijednosti()
         {
-            // Arrange + Act
+            // Priprema + Act
             var dto = new FilterPretrageDto();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.AktivniTab);
             Assert.IsNotNull(dto.Lokacija);
             Assert.AreEqual(0, dto.Lokacija.Count);
@@ -35,7 +35,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void SvaPolja_PostavljeneVrijednostiSeVracaju()
         {
-            // Arrange
+            // Priprema
             var mjesta = new List<int> { 1, 2 };
             var kategorije = new List<int> { 5, 8 };
 
@@ -58,7 +58,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 SortiranjeRadnoMjesto = SortiranjeOglasaRadnoMjesto.MaxPrihod_Asc
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("izvrsioci", dto.AktivniTab);
             CollectionAssert.AreEqual(mjesta, dto.Lokacija);
             CollectionAssert.AreEqual(kategorije, dto.KategorijaId);

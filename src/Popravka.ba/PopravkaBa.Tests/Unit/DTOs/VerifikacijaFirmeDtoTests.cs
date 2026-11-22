@@ -29,10 +29,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_OpcijaPoljaSuNull()
         {
-            // Act
+            // Akcija
             var dto = new PodnesiVerifikacijuDto();
 
-            // Assert
+            // Provjera
             Assert.IsNull(dto.PDVBroj);
             Assert.IsNull(dto.LicencaDjelatnosti);
             Assert.IsNull(dto.Logotip);
@@ -43,10 +43,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void PostavljeneVrijednosti_SeVracaju()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual("Popravka d.o.o.", dto.NazivFirme);
             Assert.AreEqual("1234567890123", dto.JIB);
             Assert.AreEqual("AB123456789012", dto.PDVBroj);
@@ -68,13 +68,13 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void ValidanDto_NemaGresaka()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, rezultati.Count);
         }
 
@@ -85,14 +85,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow("12345678901a3", false)]
         public void JIB_PostujePraviloTrinaestCifara(string jib, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.JIB = jib;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -105,14 +105,14 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(null, true)]
         public void PDVBroj_PostujePravilo(string? pdvBroj, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.PDVBroj = pdvBroj;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
@@ -122,28 +122,28 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(null, true)]
         public void WebStranica_PostujeUrlPravilo(string? webStranica, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.WebStranica = webStranica;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void NeispravanEmailOdgovorneOsobe_VracaGresku()
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.OdgovornaOsobaEmail = "amina@";
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(
                 rezultati,
                 nameof(PodnesiVerifikacijuDto.OdgovornaOsobaEmail)));
@@ -154,21 +154,21 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow("061 123 456", true)]
         public void KontaktTelefon_PostujePravilo(string telefon, bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = ValidanDto();
             dto.KontaktTelefon = telefon;
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0);
         }
 
         [TestMethod]
         public void BezObaveznihPolja_VracaGreskeZaSvaObaveznaPolja()
         {
-            // Arrange
+            // Priprema
             var dto = new PodnesiVerifikacijuDto
             {
                 NazivFirme = null!,
@@ -184,10 +184,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 PoreznoUvjerenje = null!
             };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(11, rezultati.Count);
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(PodnesiVerifikacijuDto.JIB)));
             Assert.IsTrue(DtoValidacija.ImaGreskuZa(rezultati, nameof(PodnesiVerifikacijuDto.Rjesenje)));
@@ -200,10 +200,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [TestMethod]
         public void NoviDto_ImaZadaneVrijednosti()
         {
-            // Act
+            // Akcija
             var dto = new ObradiVerifikacijuDto();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(0, dto.VerifikacioniID);
             Assert.IsFalse(dto.Odobri);
             Assert.IsNull(dto.Napomena);
@@ -214,7 +214,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
         [DataRow(false)]
         public void PostavljeneVrijednosti_SeVracaju(bool odobri)
         {
-            // Arrange
+            // Priprema
             var dto = new ObradiVerifikacijuDto
             {
                 VerifikacioniID = 4,
@@ -222,7 +222,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Napomena = "Napomena uz odluku."
             };
 
-            // Act + Assert
+            // Akcija i provjera
             Assert.AreEqual(4, dto.VerifikacioniID);
             Assert.AreEqual(odobri, dto.Odobri);
             Assert.AreEqual("Napomena uz odluku.", dto.Napomena);

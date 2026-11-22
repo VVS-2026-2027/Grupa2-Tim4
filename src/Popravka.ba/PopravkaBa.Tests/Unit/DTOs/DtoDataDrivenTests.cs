@@ -20,17 +20,17 @@ namespace PopravkaBa.Tests.Unit.DTOs
             int? maxPrihod,
             int ocekivanoGresaka)
         {
-            // Arrange
+            // Priprema
             var dto = new ObjaviOglasRadnoMjestoDto
             {
                 MinPrihod = minPrihod,
                 MaxPrihod = maxPrihod
             };
 
-            // Act
+            // Akcija
             var rezultati = dto.Validate(new ValidationContext(dto)).ToList();
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoGresaka, rezultati.Count, opis);
         }
 
@@ -45,7 +45,7 @@ namespace PopravkaBa.Tests.Unit.DTOs
             string komentar,
             bool ocekivanoValidan)
         {
-            // Arrange
+            // Priprema
             var dto = new KreirajRecenzijuDto
             {
                 IzvrsilacID = "majstor-1",
@@ -53,10 +53,10 @@ namespace PopravkaBa.Tests.Unit.DTOs
                 Komentar = komentar
             };
 
-            // Act
+            // Akcija
             var rezultati = DtoValidacija.Validiraj(dto);
 
-            // Assert
+            // Provjera
             Assert.AreEqual(ocekivanoValidan, rezultati.Count == 0, opis);
         }
 
