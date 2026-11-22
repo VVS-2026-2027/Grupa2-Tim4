@@ -1,0 +1,9 @@
+opis;minPrihod;maxPrihod;ocekivanoGresaka
+Oba prihoda nisu navedena;;;0
+Samo minimalni prihod;1000;;0
+Samo maksimalni prihod;;2000;0
+Jednaki prihodi;1500;1500;0
+Minimalni manji od maksimalnog;1000;2000;0
+Maksimalni manji od minimalnog;2000;1000;1
+Nulti prihodi;0;0;0
+Maksimalni nula uz pozitivan minimalni;100;0;1

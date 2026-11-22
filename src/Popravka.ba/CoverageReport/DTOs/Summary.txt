@@ -1,0 +1,51 @@
+Summary
+  Generated on: 11/22/2026 - 10:18:34 PM
+  Coverage date: 11/22/2026 - 10:16:52 PM
+  Parser: Cobertura
+  Assemblies: 1
+  Classes: 29
+  Files: 11
+  Line coverage: 100%
+  Covered lines: 232
+  Uncovered lines: 0
+  Coverable lines: 232
+  Total lines: 700
+  Branch coverage: 100% (6 of 6)
+  Covered branches: 6
+  Total branches: 6
+  Method coverage: 100% (225 of 225)
+  Full method coverage: 100% (225 of 225)
+  Covered methods: 225
+  Fully covered methods: 225
+  Total methods: 225
+
+PopravkaBa.Application                                        100%
+  PopravkaBa.Application.DTOs.FilterPretrageDto               100%
+  PopravkaBa.Application.DTOs.IzvrsilacListDto                100%
+  PopravkaBa.Application.DTOs.KreirajPonudaUslugeDto          100%
+  PopravkaBa.Application.DTOs.KreirajPrijavaRadnoMjestoDto    100%
+  PopravkaBa.Application.DTOs.KreirajRecenzijuDto             100%
+  PopravkaBa.Application.DTOs.LoginDto                        100%
+  PopravkaBa.Application.DTOs.ObjaviOglasMajstoraDto          100%
+  PopravkaBa.Application.DTOs.ObjaviOglasRadnoMjestoDto       100%
+  PopravkaBa.Application.DTOs.ObjaviOglasUslugeDto            100%
+  PopravkaBa.Application.DTOs.ObradiPrijavuRecenzijeDto       100%
+  PopravkaBa.Application.DTOs.ObradiVerifikacijuDto           100%
+  PopravkaBa.Application.DTOs.OglasRadnoMjestoListDto         100%
+  PopravkaBa.Application.DTOs.OglasUslugeDto                  100%
+  PopravkaBa.Application.DTOs.OglasUslugeListDto              100%
+  PopravkaBa.Application.DTOs.PodnesiVerifikacijuDto          100%
+  PopravkaBa.Application.DTOs.PonudaDto                       100%
+  PopravkaBa.Application.DTOs.PrihodValidator                 100%
+  PopravkaBa.Application.DTOs.PrijaviRecenzijuDto             100%
+  PopravkaBa.Application.DTOs.RadnoVrijemeDto                 100%
+  PopravkaBa.Application.DTOs.RegistracijaFirmeDto            100%
+  PopravkaBa.Application.DTOs.RegistracijaKlijentaDto         100%
+  PopravkaBa.Application.DTOs.RegistracijaMajstoraDto         100%
+  PopravkaBa.Application.DTOs.RezultatPretrageDto             100%
+  PopravkaBa.Application.DTOs.StatistikaDTO                   100%
+  PopravkaBa.Application.DTOs.StatistikaFilterDTO             100%
+  PopravkaBa.Application.DTOs.StatistikaRedDto                100%
+  PopravkaBa.Application.DTOs.UrediOglasMajstoraDto           100%
+  PopravkaBa.Application.DTOs.UrediOglasRadnoMjestoDto        100%
+  PopravkaBa.Application.DTOs.UrediOglasUslugeDto             100%

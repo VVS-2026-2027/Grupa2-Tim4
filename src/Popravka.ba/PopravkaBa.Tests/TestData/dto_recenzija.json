@@ -1,0 +1,38 @@
+[
+  {
+    "opis": "Ocjena 1 je donja granica",
+    "ocjena": 1,
+    "komentar": "Veoma dobra usluga.",
+    "validan": true
+  },
+  {
+    "opis": "Ocjena 5 je gornja granica",
+    "ocjena": 5,
+    "komentar": "Veoma dobra usluga.",
+    "validan": true
+  },
+  {
+    "opis": "Ocjena 0 je ispod granice",
+    "ocjena": 0,
+    "komentar": "Veoma dobra usluga.",
+    "validan": false
+  },
+  {
+    "opis": "Ocjena 6 je iznad granice",
+    "ocjena": 6,
+    "komentar": "Veoma dobra usluga.",
+    "validan": false
+  },
+  {
+    "opis": "Komentar od 9 karaktera je prekratak",
+    "ocjena": 3,
+    "komentar": "Kratak je",
+    "validan": false
+  },
+  {
+    "opis": "Komentar od 10 karaktera je dovoljan",
+    "ocjena": 3,
+    "komentar": "Kratak je.",
+    "validan": true
+  }
+]
